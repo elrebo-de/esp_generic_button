@@ -33,6 +33,6 @@
 *.app
 
 # Directories
-build/
-managed_components/
+.idea/
+dist/
 
