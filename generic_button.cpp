@@ -58,6 +58,14 @@ void GenericButton::RegisterCallbackForEvent(button_event_t event, button_cb_t c
     //ESP_ERROR_CHECK(ret);
 }
 
+void GenericButton::RegisterCallbackForEvent(button_event_t event, button_event_args_t *args, button_cb_t cb) {
+    ESP_LOGI(this->tag.c_str(), "RegisterCallbackForEvent called with args");
+
+    esp_err_t ret = iot_button_register_cb(this->btn, event, args, cb, NULL);
+
+    //ESP_ERROR_CHECK(ret);
+}
+
 void GenericButton::Stop() {
     ESP_LOGI(this->tag.c_str(), "iot_button_stop called");
 

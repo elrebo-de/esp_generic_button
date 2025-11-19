@@ -23,6 +23,7 @@ public:
 	GenericButton(std::string tag, gpio_num_t buttonPin, uint8_t activeLevel, bool disablePull, std::string buttonType);
 	virtual ~GenericButton();
     void RegisterCallbackForEvent(button_event_t event, button_cb_t cb);
+    void RegisterCallbackForEvent(button_event_t event, button_event_args_t *args, button_cb_t cb);
     void Stop();
     void Resume();
 

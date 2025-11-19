@@ -9,6 +9,8 @@
 #include "onboard_led.hpp"
 #include "esp_log.h"
 
+#include <iot_button.h>
+
 static const char *tag = "onBoard Button";
 
 // pointer to onBoardLed
@@ -59,6 +61,22 @@ extern "C" void callback_onBoardButton_BUTTON_DOUBLE_CLICK(void *arg, void *data
         led->blink();
         led->blink();
         led->blink();
+        led->blink();
+    }
+}
+
+// Callback function for BUTTON_LONG_PRESS_START (5000 ms) event from onBoardButton
+extern "C" void callback_onBoardButton_BUTTON_LONG_PRESS_START_5000(void *arg, void *data)
+{
+    ESP_LOGI("Button Callback", "for Event BUTTON_LONG_PRESS_START_5000 called!");
+
+    iot_button_print_event((button_handle_t)arg);
+
+    // bei jedem BUTTON_LONG_PRESS_START (5000 ms) wird dreieinmal weiß geblinkt
+    led->setLedState(1);
+    led->setLedPixelColor(0, 16, 16, 16); // pixel 0, color white, intensity 16/256
+
+	for(int i=0; i<3;i++) {
         led->blink();
     }
 }
@@ -124,6 +142,15 @@ extern "C" void app_main(void)
     onBoardButton.RegisterCallbackForEvent(BUTTON_SINGLE_CLICK, callback_onBoardButton_BUTTON_SINGLE_CLICK);
     onBoardButton.RegisterCallbackForEvent(BUTTON_DOUBLE_CLICK, callback_onBoardButton_BUTTON_DOUBLE_CLICK);
 
-    ESP_LOGI(tag, "program waiting 30 seconds for button callback events");
-    vTaskDelay(30000 / portTICK_PERIOD_MS); // delay 30 seconds}
+    button_event_args_t args = {
+       { // long_press
+           5000, // press_time
+       }
+    };
+    onBoardButton.RegisterCallbackForEvent(BUTTON_LONG_PRESS_START, &args, callback_onBoardButton_BUTTON_LONG_PRESS_START_5000);
+
+    ESP_LOGI(tag, "wait for button callback events");
+    while(1) {
+        vTaskDelay(1000 / portTICK_PERIOD_MS); // delay 1 second
+    }
 }
