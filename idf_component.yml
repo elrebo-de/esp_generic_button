@@ -1,6 +1,6 @@
-version: "1.0.2"
+version: "1.0.3"
 license: "Apache 2.0"
-description: "Generic Button component for ESP-IDF version 6.0+ using a C++ class and callback functions"
+description: "Generic Button component for ESP-IDF version 5.5.0+ using a C++ class and callback functions"
 url: "https://github.com/elrebo-de/generic_button"
 issues: "https://github.com/elrebo-de/generic_button/issues"
 repository: "https://github.com/elrebo-de/generic_button.git"
@@ -9,5 +9,5 @@ maintainers:
 files:
   use_gitignore: true
 dependencies:
-  idf: "^6.0.0"
+  idf: ">=5.5.0"
   espressif/button: "^4.1.4"
