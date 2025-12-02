@@ -18,6 +18,15 @@ Build the project and flash it to the board, then run the monitor tool to view t
 
 See the Getting Started Guide for all the steps to configure and use the ESP-IDF to build projects.
 
+## Function
+A button is defined.
+Two callback functions are defined for the events
+* BUTTON_SINGLE_CLICK and
+* BUTTON_DOUBLE_CLICK.
+
+In case of a single_click the onboard LED is flashed three times (if LED type is "LED strip": red, green ,blue),
+in case of a double click the onboard LED is flashed six times (if LED type is "LED strip": red, red, green, green, blue, blue).
+
 ## Example Output
 
 ```

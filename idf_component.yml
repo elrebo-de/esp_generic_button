@@ -1,4 +1,4 @@
-version: "1.0.3"
+version: "1.0.4"
 license: "Apache 2.0"
 description: "Generic Button component for ESP-IDF version 5.5.0+ using a C++ class and callback functions"
 url: "https://github.com/elrebo-de/generic_button"
