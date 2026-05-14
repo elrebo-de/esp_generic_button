@@ -65,6 +65,33 @@ extern "C" void callback_onBoardButton_BUTTON_DOUBLE_CLICK(void *arg, void *data
     }
 }
 
+// Callback function for BUTTON_DOUBLE_CLICK event from onBoardButton
+extern "C" void callback_onBoardButton_BUTTON_MULTIPLE_CLICK_3(void *arg, void *data)
+{
+    ESP_LOGI("Button Callback", "for Event BUTTON_MULTIPLE_CLICK called!");
+
+    iot_button_print_event((button_handle_t)arg);
+    //esp_sleep_wakeup_cause_t cause = esp_sleep_get_wakeup_cause();
+    //if (cause != ESP_SLEEP_WAKEUP_UNDEFINED) {
+    //    ESP_LOGI(TAG, "Wake up from light sleep, reason %d", cause);
+    //}
+
+    // bei jedem BUTTON_DOUBLE_CLICK wird einmalig die Folge rot, rot, rot, grün, grün, grün, blau, blau, blau angezeigt
+    led->setLedState(1);
+
+	for(int i=0; i<3;i++) {
+        if (i % 3 == 0) led->setLedPixelColor(0, 16, 0, 0); // pixel 0, color red, intensity 16/256
+        if (i % 3 == 1) led->setLedPixelColor(0, 0, 16, 0); // pixel 0, color green, intensity 16/256
+        if (i % 3 == 2) led->setLedPixelColor(0, 0, 0, 16); // pixel 0, color blue, intensity 16/256
+        led->blink();
+        led->blink();
+        led->blink();
+        led->blink();
+        led->blink();
+        led->blink();
+    }
+}
+
 // Callback function for BUTTON_LONG_PRESS_START (5000 ms) event from onBoardButton
 extern "C" void callback_onBoardButton_BUTTON_LONG_PRESS_START_5000(void *arg, void *data)
 {
@@ -144,12 +171,19 @@ extern "C" void app_main(void)
     onBoardButton.RegisterCallbackForEvent(BUTTON_SINGLE_CLICK, callback_onBoardButton_BUTTON_SINGLE_CLICK);
     onBoardButton.RegisterCallbackForEvent(BUTTON_DOUBLE_CLICK, callback_onBoardButton_BUTTON_DOUBLE_CLICK);
 
-    button_event_args_t args = {
+    button_event_args_t press_time = {
        { // long_press
            5000, // press_time
        }
     };
-    onBoardButton.RegisterCallbackForEvent(BUTTON_LONG_PRESS_START, &args, callback_onBoardButton_BUTTON_LONG_PRESS_START_5000);
+    onBoardButton.RegisterCallbackForEvent(BUTTON_LONG_PRESS_START, &press_time, callback_onBoardButton_BUTTON_LONG_PRESS_START_5000);
+
+    button_event_args_t clicks = {
+       { // multiple_clicks
+           3, // clicks
+       }
+    };
+    onBoardButton.RegisterCallbackForEvent(BUTTON_MULTIPLE_CLICK, &clicks, callback_onBoardButton_BUTTON_MULTIPLE_CLICK_3);
 
     ESP_LOGI(tag, "wait for button callback events");
     while(1) {
