@@ -31,7 +31,7 @@ GenericButton::GenericButton(std::string tag, gpio_num_t buttonPin, uint8_t acti
             .disable_pull = this->disablePull,
         };
         button_handle_t gpio_btn = NULL;
-        esp_err_t ret = iot_button_new_gpio_device(&btn_cfg, &btn_gpio_cfg, &gpio_btn);
+        iot_button_new_gpio_device(&btn_cfg, &btn_gpio_cfg, &gpio_btn);
         if(NULL == gpio_btn) {
             ESP_LOGE(this->tag.c_str(), "Button create failed");
         }
@@ -52,18 +52,12 @@ GenericButton::~GenericButton() {
 
 void GenericButton::RegisterCallbackForEvent(button_event_t event, button_cb_t cb) {
     ESP_LOGI(this->tag.c_str(), "RegisterCallbackForEvent called");
-
-    esp_err_t ret = iot_button_register_cb(this->btn, event, NULL, cb, NULL);
-
-    //ESP_ERROR_CHECK(ret);
+    iot_button_register_cb(this->btn, event, NULL, cb, NULL);
 }
 
 void GenericButton::RegisterCallbackForEvent(button_event_t event, button_event_args_t *args, button_cb_t cb) {
     ESP_LOGI(this->tag.c_str(), "RegisterCallbackForEvent called with args");
-
-    esp_err_t ret = iot_button_register_cb(this->btn, event, args, cb, NULL);
-
-    //ESP_ERROR_CHECK(ret);
+    iot_button_register_cb(this->btn, event, args, cb, NULL);
 }
 
 void GenericButton::Stop() {

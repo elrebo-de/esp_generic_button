@@ -1,7 +1,7 @@
-version: 1.0.9
+version: 1.0.10
 dependencies:
   idf: '>=5.5.0'
   elrebo-de/onboard_led: ~1.0.7
   elrebo-de/generic_button:
-    version: "1.0.9"
+    version: "1.0.10"
     override_path: '../../../' # three levels up, pointing to the directory with the component itself
