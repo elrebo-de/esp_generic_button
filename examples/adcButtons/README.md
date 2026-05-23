@@ -1,10 +1,10 @@
-## Generic Button Example
+## ADC Buttons Example
 
-This example demonstrates how to utilize the `generic_button` component to read button events.
+This example demonstrates how to utilize the `generic_button` component to read button events from ADC buttons.
 
 ## Hardware
 
-* Any GPIO button on any development board can be used in this example.
+* Any GPIO button, which can be used for ADC, on any development board can be used in this example.
 
 ## Build and Flash
 
@@ -19,20 +19,29 @@ Build the project and flash it to the board, then run the monitor tool to view t
 See the Getting Started Guide for all the steps to configure and use the ESP-IDF to build projects.
 
 ## Function
-A button is defined.
-Four callback functions are defined for the events
-* BUTTON_SINGLE_CLICK,
-* BUTTON_DOUBLE_CLICK,
-* BUTTON_MULTIPLE_CLICK_3 (triple click) and
-* BUTTON_LONG_PRESS_START_5000 (long press for at least 5000 ms).
+In this example an ADC channel connected to a resistor ladder with six switches is used. It is connected to GPIO pin 0 of a ESP32C3 Supermini board. On the ESP32C3 SoC GPIO pin 0 is connected to ADC unit 1 and ADC channel 0. 
 
-In case of a single_click the onboard LED is flashed three times (if LED type is "LED strip": red, green ,blue).
+With the selected resistor values and asupply voltage of 3.3 V the voltages for the six ADC buttons are:
+* button_index 0: 0.01 V (min: 0 mV, max: 154 mV)
+* button_index 1: 0.30 V (min: 155 mV, max: 477 mV)
+* button_index 2: 0.65 V (min: 478 mV, max: 852 mV)
+* button_index 3: 1.05 V (min: 853 mV, max: 1323 mV)
+* button_index 4: 1.60 V (min: 1324 mV, max: 1964 mV)
+* button_index 5: 2.33 V (min: 1965 mV, max: 2612 mV)
 
-In case of a double click the onboard LED is flashed six times (if LED type is "LED strip": red, red, green, green, blue, blue).
+An ADC unit and an ADC channel is selected in the constructor of the ADC button. This ADC channel is connected to a GPIO pin. 
 
-In case of a triple click the onboard LED is flashed nine times (if LED type is "LED strip": red, red, red, green, green, green, blue, blue, blue).
+In addition a button index and a voltage range (min and max) are specified for each ADC button.
 
-In case of a long press of at least 5000 ms the onboard LED is flashed two times (if LED type is "LED strip": white, white).
+Six ADC buttons are constructed.
+
+Now every time when a voltage in this range is detected, the button events for this button are triggered.
+
+A callback function is defined for the event BUTTON_SINGLE_CLICK.
+
+This callback function is registered with all six buttons. The button index is supplied to the callback function in the data attribute.
+
+In case of a single_click the onboard LED is flashed n times according to the button index.
 
 ## Example Output
 

@@ -10,40 +10,41 @@
 //#include "driver/gpio.h"
 //#include "soc/clk_tree_defs.h"
 
-GenericButton::GenericButton(std::string tag, gpio_num_t buttonPin, uint8_t activeLevel, bool disablePull,
-                             std::string buttonType) {
+GenericButton::GenericButton( std::string tag,
+                              button_gpio_config_t *btn_gpio_cfg) {
 	this->tag = tag;
-    this->buttonPin = buttonPin;
-    this->activeLevel = activeLevel;
-    this->disablePull = disablePull;
-    this->buttonType = buttonType;
+    this->btn_gpio_cfg = btn_gpio_cfg;
+    this->buttonType = std::string("GPIO");
 
-    // configure button according to buttonType
-    // buttonType {"GPIO"|"ADC"|"MATRIX"}
-  	if (this->buttonType == "GPIO") {
         ESP_LOGI(this->tag.c_str(), "Button Type GPIO");
         // create gpio button
         const button_config_t btn_cfg = {0, 0};
-        const button_gpio_config_t btn_gpio_cfg = {
-            .gpio_num = this->buttonPin,
-            .active_level = this->activeLevel,
-            .enable_power_save = false,
-            .disable_pull = this->disablePull,
-        };
-        button_handle_t gpio_btn = NULL;
-        iot_button_new_gpio_device(&btn_cfg, &btn_gpio_cfg, &gpio_btn);
-        if(NULL == gpio_btn) {
-            ESP_LOGE(this->tag.c_str(), "Button create failed");
+        iot_button_new_gpio_device(&btn_cfg, btn_gpio_cfg, &this->btn);
+        if(NULL == this->btn) {
+            ESP_LOGE(this->tag.c_str(), "GPIO Button create failed");
         }
+}
 
-        this->btn = gpio_btn;
-    }
-    else if (this->buttonType == "ADC") {
-        ESP_LOGI(this->tag.c_str(), "button_adc: not yet implemented!");
-    }
-    else if (this->buttonType == "MATRIX") {
-        ESP_LOGI(this->tag.c_str(), "button_matrix: not yet implemented!");
-    }
+GenericButton::GenericButton( std::string tag,
+                              button_adc_config_t *btn_adc_cfg) {
+	this->tag = tag;
+	this->btn_adc_cfg = btn_adc_cfg;
+    this->buttonType = std::string("ADC");
+
+    // .unit_id = ADC_UNIT_2,
+    // .adc_channel = ADC_CHANNEL_5,
+    // .button_index = 0,
+    // .min = 100,
+    // .max = 400,
+
+        ESP_LOGI(this->tag.c_str(), "Button Type ADC");
+        // create adc button
+        const button_config_t btn_cfg = {0, 0};
+        // ADC_ATTEN_DB_12 or ADC_ATTEN_DB11 is set in iot_button_new_adc_device
+        iot_button_new_adc_device(&btn_cfg, btn_adc_cfg, &this->btn);
+        if(NULL == this->btn) {
+            ESP_LOGE(this->tag.c_str(), "ADC Button create failed");
+        }
 }
 
 GenericButton::~GenericButton() {
@@ -55,9 +56,19 @@ void GenericButton::RegisterCallbackForEvent(button_event_t event, button_cb_t c
     iot_button_register_cb(this->btn, event, NULL, cb, NULL);
 }
 
+void GenericButton::RegisterCallbackForEvent(button_event_t event, button_cb_t cb, void *data) {
+    ESP_LOGI(this->tag.c_str(), "RegisterCallbackForEvent called");
+    iot_button_register_cb(this->btn, event, NULL, cb, data);
+}
+
 void GenericButton::RegisterCallbackForEvent(button_event_t event, button_event_args_t *args, button_cb_t cb) {
     ESP_LOGI(this->tag.c_str(), "RegisterCallbackForEvent called with args");
     iot_button_register_cb(this->btn, event, args, cb, NULL);
+}
+
+void GenericButton::RegisterCallbackForEvent(button_event_t event, button_event_args_t *args, button_cb_t cb, void *data) {
+    ESP_LOGI(this->tag.c_str(), "RegisterCallbackForEvent called with args");
+    iot_button_register_cb(this->btn, event, args, cb, data);
 }
 
 void GenericButton::Stop() {

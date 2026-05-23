@@ -6,16 +6,21 @@ any ESP32 processor and is built using the ESP-IDF build system in version 6.0+.
 The component is implemented as C++ class `GenericButton`.
 
 ## Connecting the component
+In class `GenericButton` there is one constructor for each button type.
 
-The constructor of class `GenericButton` has five parameters:
+The constructor for button type GPIO has two parameters:
 
-| Parameter   | Type of Parameter | Usage                                        |
-|:------------|:------------------|:---------------------------------------------|
-| tag         | std::string       | the tag to be used in the ESP log            |
-| buttonPin   | gpio_num_t        | the gpio number of the button                |
-| activeLevel | uint8_t           | active level of button                       |
-| disablePull | bool              | disable PU/PD function for buttonPin         |
-| buttonType  | std::string       | the button type: "GPIO" or "ADC" or "MATRIX" |
+| Parameter       | Type of Parameter         | Usage                                                         |
+|:----------------|:--------------------------|:--------------------------------------------------------------|
+| tag             | std::string               | the tag to be used in the ESP log                             |
+| btn_gpio_cfg | button_gpio_config_t | the structure to configure the GPIO button |
+
+The constructor for button type ADC has two parameters:
+
+| Parameter   | Type of Parameter   | Usage                                         |
+|:------------|:--------------------|:----------------------------------------------|
+| tag         | std::string         | the tag to be used in the ESP log             |
+| btn_adc_cfg | button_adc_config_t | the structure to configure the ADC button |
 
 # Usage
 
@@ -23,31 +28,32 @@ The constructor of class `GenericButton` has five parameters:
 The API of the component is located in the include directory ```include/generic_button.hpp``` and defines the
 C++ class ```GenericButton```
 
-Currently only buttonType == "GPIO" is implemented!
+Currently only buttonType == "GPIO" and buttonType == "ADC" are implemented!
 
 ```C++
 class GenericButton {
 public:
-	GenericButton(std::string tag, gpio_num_t buttonPin, uint8_t activeLevel, bool disablePull, std::string buttonType);
+	GenericButton(std::string tag, button_gpio_config_t btn_gpio_cfg);
+	GenericButton(std::string tag, button_adc_config_t btn_adc_cfg);
 	virtual ~GenericButton();
     void RegisterCallbackForEvent(button_event_t event, button_cb_t cb);
+    void RegisterCallbackForEvent(button_event_t event, button_event_args_t *args, button_cb_t cb);
     void Stop();
     void Resume();
 
 private:	
-	gpio_num_t buttonPin; // the pin number for this button
-	uint8_t activeLevel; // 0 = active when pressed_down, 1 = active when pressed_up
-	bool disablePull; // disable PU/PD function for gpio
+	button_gpio_config_t btn_gpio_cfg; // the button configuration for GPIO buttons
+	button_adc_config_t btn_adc_cfg; // the button configuration for ADC buttons
 	std::string buttonType; // the button type {"GPIO"|"ADC"|"MATRIX"}
 
     std::string tag = "GenericButton";
 
-    button_handle_t btn;
-};
+    button_handle_t btn = NULL;
+    };
 ```
 
 For every button event you want to detect, you have to
-* prepare a callback function to handle the event
+* prepare a callback function to handle the event,
 * register the event and the callback function for the button
 
 ``` C++

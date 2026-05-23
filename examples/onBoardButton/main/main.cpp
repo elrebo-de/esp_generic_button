@@ -68,7 +68,7 @@ extern "C" void callback_onBoardButton_BUTTON_DOUBLE_CLICK(void *arg, void *data
 // Callback function for BUTTON_DOUBLE_CLICK event from onBoardButton
 extern "C" void callback_onBoardButton_BUTTON_MULTIPLE_CLICK_3(void *arg, void *data)
 {
-    ESP_LOGI("Button Callback", "for Event BUTTON_MULTIPLE_CLICK called!");
+    ESP_LOGI("Button Callback", "for Event BUTTON_MULTIPLE_CLICK_3 called!");
 
     iot_button_print_event((button_handle_t)arg);
     //esp_sleep_wakeup_cause_t cause = esp_sleep_get_wakeup_cause();
@@ -103,7 +103,7 @@ extern "C" void callback_onBoardButton_BUTTON_LONG_PRESS_START_5000(void *arg, v
     led->setLedState(1);
     led->setLedPixelColor(0, 16, 16, 16); // pixel 0, color white, intensity 16/256
 
-	for(int i=0; i<3;i++) {
+	for(int i=0; i<4; i++) {
         led->blink();
     }
 }
@@ -145,28 +145,36 @@ extern "C" void app_main(void)
 
     led = &onBoardLed;
 
+    // set GPIO onBoard button configuration
+    #if defined(CONFIG_IDF_TARGET_ESP32C6)
+    /* ESP32-C6-DevKitM-1 V1.0 */
+    button_gpio_config_t btn_gpio_cfg = {
+        .gpio_num = 9,
+        .active_level = 0,
+        .enable_power_save = false,
+        .disable_pull = false,
+    };
+    #elif defined(CONFIG_IDF_TARGET_ESP32C3)
+    /* Waveshare ESP32-C3-Zero */
+    button_gpio_config_t btn_gpio_cfg = {
+        .gpio_num = 9,
+        .active_level = 0,
+        .enable_power_save = false,
+        .disable_pull = false,
+    };
+    #elif defined(CONFIG_IDF_TARGET_ESP32)
+    /* M5 Atom Lite */
+    button_gpio_config_t btn_gpio_cfg = {
+        .gpio_num = 39,
+        .active_level = 0,
+        .enable_power_save = false,
+        .disable_pull = true,
+    };
+    #endif
     GenericButton onBoardButton(
 	   std::string("onBoardButton"),
-	   #if defined(CONFIG_IDF_TARGET_ESP32C6)
- 	       /* ESP32-C6-DevKitM-1 V1.0 */
-		   (gpio_num_t) 9, // GPIO
-		   0, // active = DOWN
-		   false, // pull enabled
-		   std::string("GPIO")
-	   #elif defined(CONFIG_IDF_TARGET_ESP32C3)
-	       /* Waveshare ESP32-C3-Zero */
-		   (gpio_num_t) 9, // GPIO
-		   0, // active = DOWN
-		   false, // pull enabled
-		   std::string("GPIO")
-	   #elif defined(CONFIG_IDF_TARGET_ESP32)
-	       /* M5 Atom Lite */
-		   (gpio_num_t) 39, // GPIO
-		   0, // active = DOWN
-		   true, // pull disabled - M5 Atom does not support internal PU/PD on this gpio
-		   std::string("GPIO")
-	   #endif
-	   );
+	   btn_gpio_cfg
+	);
 
     onBoardButton.RegisterCallbackForEvent(BUTTON_SINGLE_CLICK, callback_onBoardButton_BUTTON_SINGLE_CLICK);
     onBoardButton.RegisterCallbackForEvent(BUTTON_DOUBLE_CLICK, callback_onBoardButton_BUTTON_DOUBLE_CLICK);
