@@ -25,7 +25,7 @@ extern "C" void callback_onBoardButton_BUTTON_SINGLE_CLICK(void *arg, void *data
 
     ESP_LOGI("adcButtons Callback", "for Event BUTTON_SINGLE_CLICK called from button_index %u", buttonIndex);
 
-    // at each BUTTON_SINGLE_CLICK the onBoard LED blinks <n> times according to the buttonIndex
+    // at each BUTTON_SINGLE_CLICK the onBoard LED blinks <n+1> times according to the buttonIndex <n>
     led->setLedState(1);
     led->setLedPixelColor(0, 16, 16, 16); // pixel 0, color white, intensity 16/256
 
@@ -49,17 +49,18 @@ extern "C" void app_main(void)
 		    std::string("RMT"),
 		    LED_MODEL_WS2812,
 	    #elif defined(CONFIG_IDF_TARGET_ESP32C3)
-	        /* Waveshare ESP32-C3-Zero
+	        /* Waveshare ESP32-C3-Zero */
 		    std::string("Waveshare ESP32-C3-Zero onBoardLed"),
 		    (gpio_num_t) 10,
 		    std::string("RGB"),
 		    std::string("RMT"),
-		    LED_MODEL_WS2812, */
-
-	        /* ESP32-C3 */
+		    LED_MODEL_WS2812,
+            // */
+	        /* ESP32-C3
 		    std::string("ESP32-C3 onBoardLed"),
 		    (gpio_num_t) 8,
             (uint8_t) 0, // activeLevel
+            // */
 	    #elif defined(CONFIG_IDF_TARGET_ESP32)
 	        /* M5 Atom Lite */
 		    std::string("M5 Atom Lite onBoardLed"),

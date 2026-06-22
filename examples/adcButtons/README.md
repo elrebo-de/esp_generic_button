@@ -46,62 +46,54 @@ In case of a single_click the onboard LED is flashed n times according to the bu
 ## Example Output
 
 ```
-I (300) main_task: Calling app_main()
-I (300) onBoard Button: onBoardButton Example Program
-I (300) M5 Atom Lite onBoardLed: configured to use addressable LED strip!
-I (300) onBoardButton: Button Type GPIO
-I (310) button: IoT Button Version: 4.1.6
-I (310) onBoardButton: RegisterCallbackForEvent called
-I (310) onBoardButton: RegisterCallbackForEvent called
-I (320) onBoardButton: RegisterCallbackForEvent called with args
-I (320) onBoardButton: RegisterCallbackForEvent called with args
-I (330) onBoard Button: wait for button callback events
-I (7620) onBoardButton Callback: for Event BUTTON_SINGLE_CLICK called!
-I (7620) button: BUTTON_SINGLE_CLICK
-I (7620) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (8130) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (8630) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (9130) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (9630) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (10130) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (12710) Button Callback: for Event BUTTON_DOUBLE_CLICK called!
-I (12710) button: BUTTON_DOUBLE_CLICK
-I (12710) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (13210) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (13710) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (14210) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (14710) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (15210) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (15710) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (16210) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (16710) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (17210) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (17710) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (18210) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (20300) Button Callback: for Event BUTTON_MULTIPLE_CLICK called!
-I (20300) button: BUTTON_MULTIPLE_CLICK
-I (20300) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (20800) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (21300) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (21800) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (22300) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (22800) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (23300) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (23800) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (24300) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (24800) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (25300) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (25800) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (26300) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (26800) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (27300) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (27800) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (28300) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (28800) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (35100) Button Callback: for Event BUTTON_LONG_PRESS_START_5000 called!
-I (35100) button: BUTTON_LONG_PRESS_START
-I (35100) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (35600) M5 Atom Lite onBoardLed: Turning the LED OFF!
-I (36100) M5 Atom Lite onBoardLed: Turning the LED ON!
-I (36600) M5 Atom Lite onBoardLed: Turning the LED OFF!
+I (254) main_task: Calling app_main()
+I (254) onBoard Button: adcButtons Example Program
+I (264) ESP32-C3 onBoardLed: configured to use GPIO LED!
+================IO DUMP Start================
+IO[8] -
+  Pullup: 0, Pulldown: 1, DriveCap: 2
+  InputEn: 0, OutputEn: [periph_sig_ctrl], OpenDrain: 0
+  FuncSel: 1 (GPIO)
+  GPIO Matrix SigOut ID: 128 (simple GPIO output)
+  SleepSelEn: 1
+
+=================IO DUMP End=================
+I (294) adcButton0: Button Type ADC
+I (294) adc_button: calibration scheme version is Curve Fitting
+I (304) adc_button: Calibration Success
+I (304) button: IoT Button Version: 4.1.6
+I (304) adcButton0: RegisterCallbackForEvent called
+I (314) adcButton1: Button Type ADC
+I (314) adcButton1: RegisterCallbackForEvent called
+I (314) adcButton2: Button Type ADC
+I (324) adcButton2: RegisterCallbackForEvent called
+I (324) adcButton3: Button Type ADC
+I (334) adcButton3: RegisterCallbackForEvent called
+I (334) adcButton4: Button Type ADC
+I (334) adcButton4: RegisterCallbackForEvent called
+I (344) adcButton5: Button Type ADC
+I (344) adcButton5: RegisterCallbackForEvent called
+I (354) onBoard Button: wait for button callback events
+I (7964) adcButtons Callback: for Event BUTTON_SINGLE_CLICK called from button_index 4
+I (7964) ESP32-C3 onBoardLed: Turning the LED ON!
+I (8464) ESP32-C3 onBoardLed: Turning the LED OFF!
+I (8964) ESP32-C3 onBoardLed: Turning the LED ON!
+I (9464) ESP32-C3 onBoardLed: Turning the LED OFF!
+I (9964) ESP32-C3 onBoardLed: Turning the LED ON!
+I (10464) ESP32-C3 onBoardLed: Turning the LED OFF!
+I (10964) ESP32-C3 onBoardLed: Turning the LED ON!
+I (11464) ESP32-C3 onBoardLed: Turning the LED OFF!
+I (11964) ESP32-C3 onBoardLed: Turning the LED ON!
+I (12464) ESP32-C3 onBoardLed: Turning the LED OFF!
+I (18464) adcButtons Callback: for Event BUTTON_SINGLE_CLICK called from button_index 0
+I (18464) ESP32-C3 onBoardLed: Turning the LED ON!
+I (18964) ESP32-C3 onBoardLed: Turning the LED OFF!
+I (25364) adcButtons Callback: for Event BUTTON_SINGLE_CLICK called from button_index 2
+I (25364) ESP32-C3 onBoardLed: Turning the LED ON!
+I (25864) ESP32-C3 onBoardLed: Turning the LED OFF!
+I (26364) ESP32-C3 onBoardLed: Turning the LED ON!
+I (26864) ESP32-C3 onBoardLed: Turning the LED OFF!
+I (27364) ESP32-C3 onBoardLed: Turning the LED ON!
+I (27864) ESP32-C3 onBoardLed: Turning the LED OFF!
+
 ```
